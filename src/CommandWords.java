@@ -42,7 +42,7 @@ public class CommandWords
     {
     	//Check to see if the string is in the reversible commands
     	if (reversibleCommands.containsKey(aString)) {
-    		return true;
+			return true;
     	}
     	
     	//Check to see if the string is in the array of other commands

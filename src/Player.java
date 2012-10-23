@@ -16,6 +16,7 @@ public class Player{
 	private int weight;
 	private HashMap<String,Item> itemsInPossesion;
 	private Room previousRoom;
+	
 	/**
 	 * Constructor for objects of class Player
 	 */
@@ -26,24 +27,46 @@ public class Player{
 		itemsInPossesion = new HashMap<String,Item>();
 	}
 
+	/**
+	 * Get the room the player is currently in
+	 * @return current room
+	 */
 	public Room getCurrentPlayerRoom() {
 		return currentRoom;
 	}
 
+	/**
+	 * Get the player's description
+	 * @return description
+	 */
 	public String getPlayerDescription() {
 		return description;
 	}
 
+	/**
+	 * Get the player's name
+	 * @return name
+	 */
 	public String getPlayerName() {
 		return name;
 	}
 
+	/**
+	 * Returns a string with details of the players inventory
+	 * @return
+	 */
 	public String getFullPlayerDescription() {
 		return name + " \n Can pick upto : " + weight
 				+ " Kg. \n total wight carried : "+totalWeightCarried() 
 				+ " \n bag pack :\n"  + InventoryToString();
 	}
 
+	/**
+	 * Pick up an item
+	 * @param itemName
+	 * @param item
+	 * @return
+	 */
 	public boolean pick(String itemName,Item item) {
 		if (canPickItem(item)) {
 			itemsInPossesion.put(itemName,item);
@@ -55,6 +78,11 @@ public class Player{
 		}
 	}
 
+	/** 
+	 * Drop the item called itemName
+	 * @param itemName
+	 * @return
+	 */
 	public Item drop(String itemName) {
 		if (!itemsInPossesion.containsKey(itemName)) {
 			return null;
@@ -65,9 +93,21 @@ public class Player{
 			return itemDropped;
 		}
 	}
+	
+	/**
+	 * Returns a reference to the item in the inventory with key key.
+	 * Does not remove the item from the inventory
+	 * @param key
+	 * @return
+	 */
 	public Item getItem(String key){
         return itemsInPossesion.get(key);
     }
+	
+	/**
+	 * @param item
+	 * @return true if user has room in the inventory
+	 */
 	private boolean canPickItem(Item item) {
 		if ((totalWeightCarried() + item.getItemWeight()) > weight) {
 			return false;
@@ -75,6 +115,9 @@ public class Player{
 		return true;
 	}
 
+	/**
+	 * @return the total weight the player is carying
+	 */
 	private int totalWeightCarried() {
 		int weightCarried = 0;
 		Set<String> keys = itemsInPossesion.keySet();
@@ -94,15 +137,17 @@ public class Player{
 
 	}
 
+	/**
+	 * Set the players current room
+	 * @param currentRoom
+	 */
 	public void setCurrentRoom(Room currentRoom) {
 		this.currentRoom = currentRoom;
 	}
-	public Room getPreviousRoom() {
-		return previousRoom;
-	}
-	public void setPreviousRoom(Room previousRoom) {
-		this.previousRoom = previousRoom;
-	}
+	
+	/**
+	 * @return a String representation of the players inventory
+	 */
 	public String InventoryToString(){
         String str = "";
         Set<String> keys = itemsInPossesion.keySet();

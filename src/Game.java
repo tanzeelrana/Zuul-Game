@@ -333,10 +333,7 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
-            
-            
             // Try to leave current room.
-            player1.setPreviousRoom(player1.getCurrentPlayerRoom());
             player1.setCurrentRoom(nextRoom);
             printLocationInfo(player1);
         }
