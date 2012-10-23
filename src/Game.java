@@ -19,7 +19,7 @@ public class Game
     private final static String PLAYER_DESCRIPTION = "Me";
     private final static int MAX_WEIGHT = 1000;
     private final static String DEFAULT_START_ROOM = "entrance";
-	
+
 	private Parser parser;
     private Player player1;
     private String playerName;
@@ -94,9 +94,9 @@ public class Game
         Item pogoStick = new Item("Pogo Stick", 5.0);
         
         //Add Items
-        entrance.addItem(plant.getItemDescription(),plant);
-        workshop.addItem(sword.getItemDescription(), sword);
-        dressingroom.addItem(pogoStick.getItemDescription(), pogoStick);
+        entrance.addItem(plant);
+        workshop.addItem(sword);
+        dressingroom.addItem(pogoStick);
         
         //Create monsters
         Monster kracken = new Monster("Kracken",10);
@@ -105,9 +105,9 @@ public class Game
         
         
         //Add Monsters to room
-        entrance.addMonster(kracken.getName(), kracken);
-        workshop.addMonster(grendel.getName(), grendel);
-        dinningroom.addMonster(goblin.getName(), goblin);
+        entrance.addMonster(kracken);
+        workshop.addMonster(grendel);
+        dinningroom.addMonster(goblin);
         
         
         player1 = new Player(playerName,PLAYER_DESCRIPTION,MAX_WEIGHT);
@@ -262,7 +262,7 @@ public class Game
         } else {
         	System.out.println(command.getSecondWord() + " health decreased to " + monster.getHealth());
         }
-		
+
 	}
     
     /**
@@ -285,7 +285,7 @@ public class Game
     
     private void drop(Command command){
     Item item = player1.drop(command.getSecondWord());
-        player1.getCurrentPlayerRoom().addItem(item.getItemDescription(),item);
+        player1.getCurrentPlayerRoom().addItem(item);
         printLocationInfo(player1);
         System.out.println();
     }
@@ -332,7 +332,7 @@ public class Game
         // Try to pick up the item.
         
         if(player1.getCurrentPlayerRoom().containsItem(itemName)&&player1.pick(itemName,item)){
-            System.out.println(item.getItemDescription() + " has been picked by " + player1.getFullPlayerDescription());
+            System.out.println(item.getItemName() + " has been picked by " + player1.getFullPlayerDescription());
             player1.getCurrentPlayerRoom().reomoveItem(itemName);
             printLocationInfo(player1);
         }else{
@@ -363,7 +363,7 @@ public class Game
             
             
             // Try to leave current room.
-            player1.setPreviousRoom(player1.getCurrentPlayerRoom());
+            //player1.setPreviousRoom(player1.getCurrentPlayerRoom());
             player1.setCurrentRoom(nextRoom);
             printLocationInfo(player1);
         }

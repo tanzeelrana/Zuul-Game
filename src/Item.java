@@ -8,20 +8,20 @@
 public class Item
 {
     
-    private String itemDescription;
+    private String itemName;
     private double itemWeight;
 
     /**
      * Constructor for objects of class Item
      */
-    public Item(String itemDescription, double itemWeight)
+    public Item(String itemName, double itemWeight)
     {
-        this.itemDescription = itemDescription;
+        this.itemName = itemName;
         this.itemWeight = itemWeight;
     }
     
-    public String getItemDescription(){
-        return itemDescription ;
+    public String getItemName(){
+        return itemName ;
     }
     
     public double getItemWeight(){

@@ -10,7 +10,7 @@ public class CommandStack {
 	//A stack of all commands said before
 	private Stack<Command> cStack;
     private CommandWords commandWords;
-	
+
     /**
      * Creates a new empty CommandStack
      */
@@ -30,10 +30,10 @@ public class CommandStack {
 		if(commandWords.isReversible(c.getCommandWord())) {
 			cStack.add(c);
 		}
-		
-		
+
+
 	}
-	
+
 	/**
 	 * Pop a command from the stack, and reverse the command
 	 * @return
@@ -42,13 +42,13 @@ public class CommandStack {
 	{
 		//If the stack is empty, return a null pointer
 		if(cStack.isEmpty())return null;
-		
+
 		//Last command taken off the stack
 		Command old  = cStack.pop();
-		
+
 		return commandWords.getReverse(old);
 	}
-	
+
 	public void empty()
 	{
 		cStack.empty();

@@ -83,8 +83,8 @@ public class Room {
 		return exits.get(direction);
 	}
 
-	public void addItem(String key, Item item) {
-		items.put(key, item);
+	public void addItem(Item item) {
+		items.put(item.getItemName(), item);
 	}
 
 	private String getItemString() {
@@ -92,12 +92,12 @@ public class Room {
 		Set<String> keys = items.keySet();
 		for (String item : keys) {
 			itemString += " Key : " + item + " Description : "
-					+ items.get(item).getItemDescription() + " Weight : "
+					+ items.get(item).getItemName() + " Weight : "
 					+ items.get(item).getItemWeight() + "\n";
 		}
 		return itemString;
 	}
-	
+
 	/**
 	 * Author: Sean
 	 * @return returns a list of the monsters in the room and their health
@@ -106,7 +106,11 @@ public class Room {
 		String ret = "Monsters in room:\n";
 		Set<String> keys = monsters.keySet();
 		for (String monster : keys) {
-			ret += "- Name : " + monster + " (" + monsters.get(monster).getHealth() + ")\n";
+			if (monsters.get(monster).isAlive()) {
+				ret += "- Name : " + monster + " (" + monsters.get(monster).getHealth() + ")\n";
+			} else {
+				ret += "- Name : " + monster + " (DEAD)\n";
+			}
 		}
 		return ret;
 	}
@@ -122,17 +126,17 @@ public class Room {
 	public boolean containsItem(String itemKey) {
 		return items.containsKey(itemKey);
 	}
-	
+
 	/**
 	 * Modification by Sean
 	 * Adds a monster to the room
 	 * @param key
 	 * @param monster
 	 */
-	public void addMonster(String key, Monster monster) {
-		monsters.put(key, monster);
+	public void addMonster(Monster monster) {
+		monsters.put(monster.getName(), monster);
 	}
-	
+
 	/**
 	 * Modification by Sean
 	 * Removes a monster with from the room
@@ -141,7 +145,7 @@ public class Room {
 	public void removeMonster(String key) {
 		monsters.remove(key);
 	}
-	
+
 	/**
 	 * Modification by Sean Byron
 	 * Gets a monster from the room
