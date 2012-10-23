@@ -16,10 +16,15 @@ import java.util.*;
 
 public class Game 
 {
-    private Parser parser;
+    private final static String PLAYER_DESCRIPTION = "Me";
+    private final static int MAX_WEIGHT = 1000;
+    private final static String DEFAULT_START_ROOM = "entrance";
+	
+	private Parser parser;
     private Player player1;
+    private String playerName;
     private HashMap<String,Room> rooms;
-
+    private CommandWords commandWords;
     private CommandStack redoStack;
     private CommandStack undoStack;
 
@@ -31,7 +36,8 @@ public class Game
     {
         parser = new Parser();
         rooms = new HashMap<String,Room>();
-        createRooms();
+        playerName = null;
+        initializeGame();
         undoStack = new CommandStack();
         redoStack = new CommandStack();
     }
@@ -39,11 +45,10 @@ public class Game
     /**
      * Create all the rooms and link their exits together.
      */
-    private void createRooms()
+    private void initializeGame()
     {
         Room gallery,waitingroom, workshop, lobby, entrance, dinningroom,studio,theater, dressingroom,technician;
         
-        Item plants;
         // create the rooms
         rooms.put("gallary",gallery = new Room("gallary"));
         rooms.put("workshop",workshop = new Room("workshop"));
@@ -56,8 +61,7 @@ public class Game
         rooms.put("technician room",technician = new Room("technician room"));
         rooms.put("waiting room",waitingroom = new Room("waiting room"));
 
-        //create the items
-        plants = new Item("Plant",5.0);
+        
 
         // initialise room exits
 
@@ -83,16 +87,31 @@ public class Game
         theater.setExits("east",studio);
         theater.setExits("west",workshop);
         entrance.setExits("south",lobby);
-        entrance.addItem(plants);
         
-        //Create a monster
+        //create the items
+        Item plant = new Item("Plant",2.0);
+        Item sword = new Item("Sword", 7.0);
+        Item pogoStick = new Item("Pogo Stick", 5.0);
+        
+        //Add Items
+        entrance.addItem(plant);
+        workshop.addItem(sword);
+        dressingroom.addItem(pogoStick);
+        
+        //Create monsters
         Monster kracken = new Monster("Kracken",10);
+        Monster grendel = new Monster("Grendel", 8);
+        Monster goblin = new Monster("Goblin",3);
+        
+        
+        //Add Monsters to room
         entrance.addMonster(kracken);
+        workshop.addMonster(grendel);
+        dinningroom.addMonster(goblin);
         
         
-        
-        player1 = new Player("tanzeel"," me ",1000);
-        player1.setCurrentRoom(rooms.get("entrance"));  // start game outside
+        player1 = new Player(playerName,PLAYER_DESCRIPTION,MAX_WEIGHT);
+        player1.setCurrentRoom(rooms.get(DEFAULT_START_ROOM));  // start game outside
 
     }
 
@@ -100,7 +119,7 @@ public class Game
      *  Main play routine.  Loops until end of play.
      * @throws CloneNotSupportedException 
      */
-    public void play() throws CloneNotSupportedException 
+    public void play()
     {            
         printWelcome();
 
@@ -126,6 +145,10 @@ public class Game
         System.out.println("World of Zuul is a new, incredibly boring adventure game.");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
+        System.out.println("Please enter your name:");
+        playerName = parser.getCommand().getCommandWord();
+        System.out.println();
+        System.out.println();
         printLocationInfo(player1);
     }
 
@@ -146,6 +169,10 @@ public class Game
         if(command.isUnknown()) {
             System.out.println("I don't know what you mean...");
             return false;
+        }
+        if(commandWords.isReversible(command.getCommandWord()))
+        {
+        	redoStack.empty();
         }
 
         String commandWord = command.getCommandWord();
@@ -229,7 +256,7 @@ public class Game
         monster.decreaseHealth();
         
         if (!monster.isAlive()) {
-        	//currentRoom.removeMonster(command.getSecondWord());
+        	currentRoom.removeMonster(command.getSecondWord());
         	System.out.println("Good job! You've killed " + command.getSecondWord());
         	return;
         } else {
@@ -333,7 +360,10 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
+            
+            
             // Try to leave current room.
+            //player1.setPreviousRoom(player1.getCurrentPlayerRoom());
             player1.setCurrentRoom(nextRoom);
             printLocationInfo(player1);
         }
@@ -357,11 +387,6 @@ public class Game
     
     public static void main(String args[]) {
     	Game game = new Game();
-    	try {
 			game.play();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
 }

@@ -1,5 +1,4 @@
 import java.util.HashMap;
-import java.util.Set;
 
 /**
  * This class is part of the "World of Zuul" application. 
@@ -53,7 +52,7 @@ public class CommandWords
     {
     	//Check to see if the string is in the reversible commands
     	if (reversibleCommands.containsKey(aString)) {
-			return true;
+    		return true;
     	}
     	
     	//Check to see if the string is in the array of other commands
@@ -72,12 +71,6 @@ public class CommandWords
         for(String command : validCommands ){
             commandList+=(command + " " );
         }
-        
-        Set<String> reverseCommandsSet = reversibleCommands.keySet();
-        for(String command : reverseCommandsSet ){
-            commandList+=(command + " " );
-        }
-        
         return commandList;
     }
     
