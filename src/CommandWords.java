@@ -14,15 +14,25 @@ public class CommandWords
 {
     // a constant array that holds all valid command words
     private static final String[] validCommands = {
-        "go", "quit", "help" , "look", "back", "undo","redo"
+        "quit", "help" , "look", "back", "undo","redo"
     };
     
-	public final static HashMap<String, String> reversibleCommands = new HashMap<String, String>();
+    private final static HashMap<String, String> reversibleCommands = new HashMap<String, String>();
     static {
     	reversibleCommands.put("pick", "drop");
     	reversibleCommands.put("drop", "pick");
-    	reversibleCommands.put("attack", "unattack");
-    	reversibleCommands.put("unattack", "attack");
+    	reversibleCommands.put("attack", "heal");
+    	reversibleCommands.put("heal", "attack");
+    	reversibleCommands.put("go", "go");
+	}
+    
+    
+    public final static HashMap<String, String> reverseSecondWord = new HashMap<String, String>();
+    static {
+    	reverseSecondWord.put("north", "south");
+    	reverseSecondWord.put("south", "north");
+    	reverseSecondWord.put("east", "west");
+    	reverseSecondWord.put("west", "east");
 	}
 
     /**
@@ -54,7 +64,7 @@ public class CommandWords
         return false;
     }
     /**
-     * prints all valid commands to System.out
+     * returns string of all valid commands
      */
     public String getCommandList(){
         String commandList = "";
@@ -70,6 +80,28 @@ public class CommandWords
      */
     public HashMap<String, String> getReversibleCommands() {
     	return reversibleCommands;
+    }
+    
+    public boolean isReversible(String s)
+    {
+    	return reversibleCommands.containsKey(s);
+    }
+    
+    public Command getReverse(Command c)
+    {
+    	//If command is non-reversible, return a null Command
+    	if(!isReversible(c.getCommandWord()))return null;
+    	
+    	//If first words reverse is equal to itself (such as go)
+    	//Return a command with original first word and reverse second word
+    	if(c.getCommandWord().equals(reversibleCommands.get(c.getCommandWord())))
+    	{
+    		return new Command(c.getCommandWord(), reverseSecondWord.get(c.getSecondWord()));
+    	}
+    	
+ 
+    	//Return a command with reversed first word and original second word
+    	return new Command(reversibleCommands.get(c.getCommandWord()), c.getSecondWord());
     }
     
 }

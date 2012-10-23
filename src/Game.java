@@ -179,8 +179,8 @@ public class Game
         else if (commandWord.equals("attack")) {
         	attack(command);
         }        
-        else if (commandWord.equals("unattack")) {
-        	unAttack(command);
+        else if (commandWord.equals("heal")) {
+        	heal(command);
         }
 
         return wantToQuit;
@@ -242,7 +242,7 @@ public class Game
      * Un-attack monster
      * @param command
      */
-    private void unAttack(Command command) {
+    private void heal(Command command) {
         Room currentRoom = player1.getCurrentPlayerRoom();
         Monster monster = currentRoom.getMonster(command.getSecondWord());
         
