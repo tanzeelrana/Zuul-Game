@@ -27,7 +27,7 @@ public class Room {
 	 */
 	public Room(String description) {
 		this.description = description;
-		exits = new HashMap<>();
+		exits = new HashMap<String, Room>();
 		items = new HashMap<String, Item>();
 		monsters = new HashMap<String, Monster>();
 	}

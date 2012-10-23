@@ -40,6 +40,7 @@ public class Game
         initializeGame();
         undoStack = new CommandStack();
         redoStack = new CommandStack();
+        commandWords = new CommandWords();
     }
 
     /**
