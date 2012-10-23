@@ -131,7 +131,7 @@ public class Player{
 	public void printItemsAndWeight() {
 	    Set<String> keys = itemsInPossesion.keySet();
 		for (String items : keys) {
-			System.out.println( itemsInPossesion.get(items).getItemDescription() + " "
+			System.out.println( itemsInPossesion.get(items).getItemName() + " "
 					+  itemsInPossesion.get(items).getItemWeight() + "\n");
 		}
 		System.out.println(totalWeightCarried());
@@ -153,7 +153,7 @@ public class Player{
         String str = "";
         Set<String> keys = itemsInPossesion.keySet();
         for (String items : keys){
-            str += itemsInPossesion.get(items).getItemDescription() + " "
+            str += itemsInPossesion.get(items).getItemName() + " "
                     +  itemsInPossesion.get(items).getItemWeight() + "\n";
         }
         return str;
