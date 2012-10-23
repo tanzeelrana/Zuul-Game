@@ -106,7 +106,11 @@ public class Room {
 		String ret = "Monsters in room:\n";
 		Set<String> keys = monsters.keySet();
 		for (String monster : keys) {
-			ret += "- Name : " + monster + " (" + monsters.get(monster).getHealth() + ")\n";
+			if (monsters.get(monster).isAlive()) {
+				ret += "- Name : " + monster + " (" + monsters.get(monster).getHealth() + ")\n";
+			} else {
+				ret += "- Name : " + monster + " (DEAD)\n";
+			}
 		}
 		return ret;
 	}

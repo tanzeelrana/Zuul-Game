@@ -12,10 +12,10 @@ public class Player{
 	private String name;
 	private String description;
 	private Room currentRoom;
-	private double currweight;
+	@SuppressWarnings("unused")
+	private int currweight;
 	private int weight;
 	private HashMap<String,Item> itemsInPossesion;
-	private Room previousRoom;
 	
 	/**
 	 * Constructor for objects of class Player
@@ -24,6 +24,7 @@ public class Player{
 		this.name = name;
 		this.description = description;
 		this.weight = weight;
+		currweight = weight;
 		itemsInPossesion = new HashMap<String,Item>();
 	}
 
