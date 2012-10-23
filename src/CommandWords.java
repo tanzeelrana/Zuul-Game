@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 /**
  * This class is part of the "World of Zuul" application. 
  * "World of Zuul" is a very simple, text based adventure game.  
@@ -12,8 +14,16 @@ public class CommandWords
 {
     // a constant array that holds all valid command words
     private static final String[] validCommands = {
-        "go", "quit", "help" , "look", "eat", "back", "undo","redo","attack","unattack","pick","drop"
+        "go", "quit", "help" , "look", "back", "undo","redo"
     };
+    
+	public final static HashMap<String, String> reversibleCommands = new HashMap<String, String>();
+    static {
+    	reversibleCommands.put("pick", "drop");
+    	reversibleCommands.put("drop", "pick");
+    	reversibleCommands.put("attack", "unattack");
+    	reversibleCommands.put("unattack", "attack");
+	}
 
     /**
      * Constructor - initialise the command words.
@@ -30,6 +40,12 @@ public class CommandWords
      */
     public boolean isCommand(String aString)
     {
+    	//Check to see if the string is in the reversible commands
+    	if (reversibleCommands.containsKey(aString)) {
+    		return true;
+    	}
+    	
+    	//Check to see if the string is in the array of other commands
         for(int i = 0; i < validCommands.length; i++) {
             if(validCommands[i].equals(aString))
                 return true;
@@ -46,6 +62,14 @@ public class CommandWords
             commandList+=(command + " " );
         }
         return commandList;
+    }
+    
+    /**
+     * Returns a copy of the list of reversible commands
+     * @return
+     */
+    public HashMap<String, String> getReversibleCommands() {
+    	return reversibleCommands;
     }
     
 }

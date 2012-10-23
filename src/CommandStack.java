@@ -1,6 +1,11 @@
-
 import java.util.*;
 
+/**
+ * This class holds a stack of commands that were entered by the user. This class is used
+ * with the Undo and Redo commands, and provides functionality for reversing commands
+ * @author Ethan
+ *
+ */
 public class CommandStack {
 	//A stack of all commands said before
 	private Stack<Command> cStack;
@@ -8,13 +13,9 @@ public class CommandStack {
 	public final static String GO = "go";
 	public final static String UNDO = "undo";
 	public final static String REDO = "redo";
-	public final static HashMap<String, String> reverseCommand = new HashMap<String, String>();
-    static {
-    	 reverseCommand.put("pick", "drop");
-    	 reverseCommand.put("drop", "pick");
-    	 reverseCommand.put("attack", "unattack");
-    	 reverseCommand.put("unattack", "attack");
-	}
+	
+
+	private static HashMap<String, String> reverseCommand;
     public final static HashMap<String, String> reverseDirection = new HashMap<String, String>();
     static {
     	reverseDirection.put("north", "south");
@@ -22,12 +23,22 @@ public class CommandStack {
     	reverseDirection.put("east", "west");
     	reverseDirection.put("west", "east");
 	}
+    private CommandWords commandWords;
 	
+    /**
+     * Creates a new empty CommandStack
+     */
 	public CommandStack()
 	{
 		cStack = new Stack<Command>();
+		commandWords = new CommandWords();
+		reverseCommand = commandWords.getReversibleCommands();
 	}
 
+	/**
+	 * Add a command to the stack. Undo and Redo commands are ingnored
+	 * @param c
+	 */
 	public void add(Command c)
 	{
 		//Do not add undo or redo commands to a command stack
@@ -38,6 +49,10 @@ public class CommandStack {
 		cStack.add(c);
 	}
 	
+	/**
+	 * Pop a command from the stack, and reverse the command
+	 * @return
+	 */
 	public Command pop()
 	{
 		//If the stack is empty, return a null pointer
