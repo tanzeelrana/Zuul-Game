@@ -1,4 +1,3 @@
-
 /**
  * An Item in an adventure game.
  * 
