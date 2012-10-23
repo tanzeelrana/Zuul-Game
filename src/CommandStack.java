@@ -48,4 +48,9 @@ public class CommandStack {
 		
 		return commandWords.getReverse(old);
 	}
+	
+	public void empty()
+	{
+		cStack.empty();
+	}
 }
