@@ -257,7 +257,6 @@ public class Game
         monster.decreaseHealth();
         
         if (!monster.isAlive()) {
-        	currentRoom.removeMonster(command.getSecondWord());
         	System.out.println("Good job! You've killed " + command.getSecondWord());
         	return;
         } else {
