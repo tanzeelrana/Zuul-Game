@@ -118,7 +118,6 @@ public class Game
 
     /**
      *  Main play routine.  Loops until end of play.
-     * @throws CloneNotSupportedException 
      */
     public void play()
     {            
@@ -161,7 +160,6 @@ public class Game
      * Given a command, process (that is: execute) the command.
      * @param command The command to be processed.
      * @return true If the command ends the game, false otherwise.
-     * @throws CloneNotSupportedException 
      */
     private boolean processCommand(Command command) 
     {
@@ -188,9 +186,6 @@ public class Game
         }
         else if (commandWord.equals("look")){
             look();
-        }
-        else if (commandWord.equals("eat")){
-            eat();
         }
         else if (commandWord.equals("undo")){
             undo();
@@ -289,11 +284,6 @@ public class Game
         printLocationInfo(player1);
         System.out.println();
     }
-   
-
-    private void eat(){
-        System.out.println("you have eaten now and you are not hungry anymore ");
-    }
 
     private void look(){
         System.out.println(player1.getCurrentPlayerRoom().getLongDescription());
@@ -360,10 +350,7 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
-            
-            
             // Try to leave current room.
-            //player1.setPreviousRoom(player1.getCurrentPlayerRoom());
             player1.setCurrentRoom(nextRoom);
             printLocationInfo(player1);
         }
