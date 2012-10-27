@@ -16,7 +16,7 @@ public class Player{
 	private int currweight;
 	private int weight;
 	private HashMap<String,Item> itemsInPossesion;
-	
+
 	/**
 	 * Constructor for objects of class Player
 	 */
@@ -94,7 +94,7 @@ public class Player{
 			return itemDropped;
 		}
 	}
-	
+
 	/**
 	 * Returns a reference to the item in the inventory with key key.
 	 * Does not remove the item from the inventory
@@ -104,7 +104,7 @@ public class Player{
 	public Item getItem(String key){
         return itemsInPossesion.get(key);
     }
-	
+
 	/**
 	 * @param item
 	 * @return true if user has room in the inventory
@@ -145,7 +145,7 @@ public class Player{
 	public void setCurrentRoom(Room currentRoom) {
 		this.currentRoom = currentRoom;
 	}
-	
+
 	/**
 	 * @return a String representation of the players inventory
 	 */
@@ -158,6 +158,5 @@ public class Player{
         }
         return str;
     }
-	  
-}
 
+}

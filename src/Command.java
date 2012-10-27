@@ -69,4 +69,3 @@ public class Command
         return (secondWord != null);
     }
 }
-

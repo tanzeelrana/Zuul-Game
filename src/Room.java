@@ -27,7 +27,7 @@ public class Room {
 	 */
 	public Room(String description) {
 		this.description = description;
-		exits = new HashMap<>();
+		exits = new HashMap<String, Room>();
 		items = new HashMap<String, Item>();
 		monsters = new HashMap<String, Monster>();
 	}
@@ -97,7 +97,7 @@ public class Room {
 		}
 		return itemString;
 	}
-	
+
 	/**
 	 * Author: Sean
 	 * @return returns a list of the monsters in the room and their health
@@ -126,7 +126,7 @@ public class Room {
 	public boolean containsItem(String itemKey) {
 		return items.containsKey(itemKey);
 	}
-	
+
 	/**
 	 * Modification by Sean
 	 * Adds a monster to the room
@@ -136,7 +136,7 @@ public class Room {
 	public void addMonster(Monster monster) {
 		monsters.put(monster.getName(), monster);
 	}
-	
+
 	/**
 	 * Modification by Sean
 	 * Removes a monster with from the room
@@ -145,7 +145,7 @@ public class Room {
 	public void removeMonster(String key) {
 		monsters.remove(key);
 	}
-	
+
 	/**
 	 * Modification by Sean Byron
 	 * Gets a monster from the room

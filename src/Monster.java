@@ -4,10 +4,10 @@
  *	October 21st 2012
  */
 public class Monster {
-	
+
 	private String name;
 	private int health;
-	
+
 	/**
 	 * Create a new monster
 	 * @param name
@@ -17,7 +17,7 @@ public class Monster {
 		this.name = name;
 		this.health = health;
 	}
-	
+
 	/**
 	 * Returns the name of the monster
 	 * @return
@@ -25,7 +25,7 @@ public class Monster {
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * Decreases the health of the monster by one
 	 */
@@ -34,14 +34,14 @@ public class Monster {
 			health--;
 		}
 	}
-	
+
 	/**
 	 * Increases the health of the monster by one
 	 */
 	public void increaseHealth() {
 		health++;
 	}
-	
+
 	/**
 	 * Indicates whether the monster is alive
 	 * @return true if monster has health greater than 0
@@ -49,7 +49,7 @@ public class Monster {
 	public boolean isAlive() {
 		return health>0;
 	}
-	
+
 	/**
 	 * Returns the current health value
 	 * @return health
@@ -57,6 +57,6 @@ public class Monster {
 	public int getHealth() {
 		return health;
 	}
-	
+
 
 }

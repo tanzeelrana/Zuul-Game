@@ -19,7 +19,7 @@ public class Game
     private final static String PLAYER_DESCRIPTION = "Me";
     private final static int MAX_WEIGHT = 1000;
     private final static String DEFAULT_START_ROOM = "entrance";
-	
+
 	private Parser parser;
     private Player player1;
     private String playerName;
@@ -118,6 +118,7 @@ public class Game
 
     /**
      *  Main play routine.  Loops until end of play.
+     * @throws CloneNotSupportedException 
      */
     public void play()
     {            
@@ -160,6 +161,7 @@ public class Game
      * Given a command, process (that is: execute) the command.
      * @param command The command to be processed.
      * @return true If the command ends the game, false otherwise.
+     * @throws CloneNotSupportedException 
      */
     private boolean processCommand(Command command) 
     {
@@ -186,6 +188,9 @@ public class Game
         }
         else if (commandWord.equals("look")){
             look();
+        }
+        else if (commandWord.equals("eat")){
+            eat();
         }
         else if (commandWord.equals("undo")){
             undo();
@@ -252,12 +257,13 @@ public class Game
         monster.decreaseHealth();
         
         if (!monster.isAlive()) {
+        	//currentRoom.removeMonster(command.getSecondWord());
         	System.out.println("Good job! You've killed " + command.getSecondWord());
         	return;
         } else {
         	System.out.println(command.getSecondWord() + " health decreased to " + monster.getHealth());
         }
-		
+
 	}
     
     /**
@@ -283,6 +289,11 @@ public class Game
         player1.getCurrentPlayerRoom().addItem(item);
         printLocationInfo(player1);
         System.out.println();
+    }
+   
+
+    private void eat(){
+        System.out.println("you have eaten now and you are not hungry anymore ");
     }
 
     private void look(){
@@ -350,7 +361,10 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
+            
+            
             // Try to leave current room.
+            //player1.setPreviousRoom(player1.getCurrentPlayerRoom());
             player1.setCurrentRoom(nextRoom);
             printLocationInfo(player1);
         }
