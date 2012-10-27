@@ -1,0 +1,132 @@
+Read Me
+*************************************************
+*                 World of Zuul                 *
+*                     V 1.0                     *
+*                                               *
+*                  Developed By:                *
+*                   Tanzeel Rana                *
+*               Muhammad Mohd Johari            *
+*                    Sean Byron                 *
+*                  Ethan Aubuchon               *
+*                                               *
+*             Created October 23, 2012          *
+*************************************************
+
+1.0 About:
+
+The world of Zuul is a thrilling, text-based, action adventure fanatasy game.  The player embarks on a misticle journey through the world of Zuul, on a quest to do nothing of note.  Along the way the player will encounter multiple foes, which he/she can choose to slay.  Their scary names may strike fear into your heart but have no fear, for they shall not attack.
+
+1.1 Monsters:
+
+There are three monsters hidden in the world of Zuul.
+
+**********************
+*Name       * Health *
+**********************
+**********************
+*Kracken    *   10   *
+**********************
+*Grendel    *    8   *
+**********************
+*Goblin     *    3   *
+**********************
+
+1.2 Items:
+
+Throught Zuul, there are three items, hidden in plain view in three seperate rooms.  All three of these hold absolutely no purpose.  Each item has a weight.  You cannot exceed the maximum weight of 1000 units.
+
+**********************
+*Name       * Weight *
+**********************
+**********************
+*Plant      *   2.0  *
+**********************
+*Sword      *   7.0  *
+**********************
+*Pogo Stick *   5.0  *
+**********************
+
+1.3 Map:
+
+The World of Zuul consists of 10 rooms.  They are mapped as follows.
+
+
+                                            *******************
+                                            *                 *
+                                            *                 *
+                                            *                 *
+                                            *     Entrance    *
+                                            *                 *
+                                            *                 *
+                                            *                 *
+                                            *                 *
+                                            ********   ********
+                                                   *   *
+                                                   *   *
+*******************   *******************   ********   ********   *******************
+*                 *   *                 *   *                 *   *                 *
+*                 *   *                 *   *                 *   *                 *
+*                 *   *                 *****                 *****                 *
+*     Gallery     *   *     Waiting                Lobby                Dinning     *
+*                 *   *       Room                                       Room       *
+*                 *   *                 *****                 *****                 *
+*                 *   *                 *   *                 *   *                 *
+*                 *   *                 *   *                 *   *                 *
+********   ********   *******************   ********   ********   ********   ********
+       *   *                                       *   *                 *   *
+       *   *                                       *   *                 *   *
+********   ********                         ********   ********   ********   ********
+*                 *                         *                 *   *                 *
+*                 *                         *                 *   *                 *
+*                 *                         *                 *****                 *
+*    Workshop     *                         *     Theatre                Studio     *
+*                 *                         *                                       *
+*                 *                         *                 *****                 *
+*                 *                         *                 *   *                 *
+*                 *                         *                 *   *                 *
+********   ********                         *******************   ********   ********
+       *   *                                                             *   *
+       *   *                                                             *   *
+********   ********                                               ********   ********
+*                 *                                               *                 *
+*                 *                                               *                 *
+*                 *************************************************                 *
+*    Dressing                                                          Technition   *
+*      Room                                                                         *
+*                 *************************************************                 *
+*                 *                                               *                 *
+*                 *                                               *                 *
+*******************                                               *******************
+
+
+2.0 Implementation:
+
+2.1 Undo/Redo:
+
+We chose to use an undo and redo stack to help implement the undo and redo methods.  Whenever a new command is entered, if it is a command that we have programmed to be "reversible" (a command we wish for the user to be able to undo), the command is pushed into the undo stack.  Whenever undo is called, the command is popped of the stack, inverted (pick becomes drop, attack becomes heal, go north becomes go south, ect), this reversed command is followed, and then stored into a redo stack.  If redo is called the command is popped out of the stack, reversed, followed, and stuck into the undo stack.  Whenever a reversable command is called, the redo stack is emptied.
+
+2.2 Command words:
+
+The command words have been broken into two categories: reversible and nonreversible.  The non-reversible commands are stored in a final static array of Strings.  The reversible commands are stored as keys in a hashmap, their reverse being stored as the value.  Only reversible commands can be undone.  If a command appears as its own reverse, then the code will go to a hashmap of second words and their reverse.  Currently, this rule only effect go and its directions.
+
+Only reversible commands will be put into the undo/redo stacks, meaning undo and redo will only affect reversible commands.
+
+The commands are as follows:
+
+Reversible:
+go - go
+pick - drop
+drop - pick
+attack - heal
+heal - attack
+
+Non-reversible:
+help
+look
+undo
+redo
+quit
+
+2.3 Items and Monster
+
+Items and monsters are stored in hashmaps.  Their string equivalent that the user inputs are the keys.  This makes it easy to return the proper monster or item to the Game class.
