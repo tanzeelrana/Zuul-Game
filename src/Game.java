@@ -14,7 +14,7 @@ import java.util.*;
  * 
  */
 
-public class Game 
+public class Game extends Observable
 {
     private final static String PLAYER_DESCRIPTION = "Me";
     private final static int MAX_WEIGHT = 1000;
@@ -30,7 +30,7 @@ public class Game
 
     
     /**
-     * Create the game and initialise its internal map.
+     * Create the game and initialize its internal map.
      */
     public Game() 
     {
@@ -361,13 +361,15 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
-            
-            
             // Try to leave current room.
             //player1.setPreviousRoom(player1.getCurrentPlayerRoom());
             player1.setCurrentRoom(nextRoom);
             printLocationInfo(player1);
         }
+        
+        //Notify observers
+        setChanged();
+        notifyObservers(player1.getCurrentPlayerRoom());
     }
 
     /** 
@@ -387,7 +389,13 @@ public class Game
     }
     
     public static void main(String args[]) {
+    	//Create a 2D Map View
+    	MapView view = new MapView("World of Zuul");
+    	
     	Game game = new Game();
-			game.play();
+    	game.addObserver(view);
+    	
+    	view.setVisible(true);
+		game.play();
     }
 }
