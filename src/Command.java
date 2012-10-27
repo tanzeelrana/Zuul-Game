@@ -53,13 +53,6 @@ public class Command
         return secondWord;
     }
 
-    /**
-     * @return true if this command was not understood.
-     */
-    public boolean isUnknown()
-    {
-        return (commandWord == null);
-    }
 
     /**
      * @return true if the command has a second word.

@@ -166,7 +166,7 @@ public class Game
     {
         boolean wantToQuit = false;
 
-        if(command.isUnknown()) {
+        if(command==null) {
             System.out.println("I don't know what you mean...");
             return false;
         }
