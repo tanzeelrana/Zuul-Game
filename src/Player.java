@@ -69,7 +69,7 @@ public class Player{
         return itemsInPossesion.get(key);
     }
 	private boolean canPickItem(Item item) {
-		if ((totalWeightCarried() + item.getItemWeight()) > weight) {
+		if ((this.currweight + item.getItemWeight()) > weight) {
 			return false;
 		}
 		return true;
