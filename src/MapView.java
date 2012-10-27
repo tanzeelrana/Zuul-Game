@@ -52,8 +52,24 @@ public class MapView extends JFrame implements Observer {
 	}
 
 	public void update(Observable arg0, Object arg1) {
-		if (arg1 instanceof Room) {
-			Room currentRoom = (Room)arg1;
+		if (arg1 instanceof DrawableRoom) {
+			DrawableRoom currentRoom = (DrawableRoom)arg1;
+			setPanel(1, 1, currentRoom.getRoomPanel());
+			//refresh();
+			this.repaint();
+		}
+	}
+	
+	public void setPanel(int x, int y, JPanel panel) {
+		tiles[x][y] = panel;
+	}
+	
+	public void refresh() {
+		this.removeAll();
+		for (int i=0; i<SIZE; i++ ){
+			for (int j=0; j<SIZE; j++) {
+				add(tiles[i][j]);
+			}
 		}
 	}
 

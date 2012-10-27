@@ -51,16 +51,16 @@ public class Game extends Observable
         Room gallery,waitingroom, workshop, lobby, entrance, dinningroom,studio,theater, dressingroom,technician;
         
         // create the rooms
-        rooms.put("gallary",gallery = new Room("gallary"));
-        rooms.put("workshop",workshop = new Room("workshop"));
-        rooms.put("lobby",lobby = new Room("lobby"));
-        rooms.put("entrance",entrance = new Room("entrance"));
-        rooms.put("dinning room",dinningroom = new Room("dinning room"));
-        rooms.put("studio",studio = new Room("studio"));
-        rooms.put("theater",theater = new Room("theater"));
-        rooms.put("dressing room",dressingroom = new Room("dressing room"));
-        rooms.put("technician room",technician = new Room("technician room"));
-        rooms.put("waiting room",waitingroom = new Room("waiting room"));
+        rooms.put("gallary",gallery = new DrawableRoom("gallary"));
+        rooms.put("workshop",workshop = new DrawableRoom("workshop"));
+        rooms.put("lobby",lobby = new DrawableRoom("lobby"));
+        rooms.put("entrance",entrance = new DrawableRoom("entrance"));
+        rooms.put("dinning room",dinningroom = new DrawableRoom("dinning room"));
+        rooms.put("studio",studio = new DrawableRoom("studio"));
+        rooms.put("theater",theater = new DrawableRoom("theater"));
+        rooms.put("dressing room",dressingroom = new DrawableRoom("dressing room"));
+        rooms.put("technician room",technician = new DrawableRoom("technician room"));
+        rooms.put("waiting room",waitingroom = new DrawableRoom("waiting room"));
 
         
 
@@ -122,6 +122,10 @@ public class Game extends Observable
      */
     public void play()
     {            
+        //Notify observers
+        setChanged();
+        notifyObservers(player1.getCurrentPlayerRoom());
+        
         printWelcome();
 
         // Enter the main command loop.  Here we repeatedly read commands and
