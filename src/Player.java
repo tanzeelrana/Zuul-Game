@@ -40,7 +40,7 @@ public class Player{
 
 	public String getFullPlayerDescription() {
 		return name + " \n Can pick upto : " + weight
-				+ " Kg. \n total wight carried : "+totalWeightCarried() 
+				+ " Kg. \n total wight carried : "+this.currweight 
 				+ " \n bag pack :\n"  + InventoryToString();
 	}
 
@@ -75,14 +75,6 @@ public class Player{
 		return true;
 	}
 
-	private int totalWeightCarried() {
-		int weightCarried = 0;
-		Set<String> keys = itemsInPossesion.keySet();
-		for (String items : keys) {
-			weightCarried += itemsInPossesion.get(items).getItemWeight();
-		}
-		return weightCarried;
-	}
 
 	public void printItemsAndWeight() {
 	    Set<String> keys = itemsInPossesion.keySet();
@@ -90,7 +82,7 @@ public class Player{
 			System.out.println( itemsInPossesion.get(items).getItemDescription() + " "
 					+  itemsInPossesion.get(items).getItemWeight() + "\n");
 		}
-		System.out.println(totalWeightCarried());
+		System.out.println(this.currweight);
 
 	}
 
