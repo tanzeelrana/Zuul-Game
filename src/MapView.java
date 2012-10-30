@@ -35,7 +35,7 @@ public class MapView extends JFrame implements Observer {
 		for (int i=0; i<SIZE; i++ ){
 			for (int j=0; j<SIZE; j++) {
 				tiles[i][j] = new JPanel();
-				tiles[i][j].add(new JLabel("(" + i + "," + j + ")"));
+				//tiles[i][j].add(new JLabel("(" + i + "," + j + ")"));
 				add(tiles[i][j]);
 			}
 		}
@@ -54,23 +54,89 @@ public class MapView extends JFrame implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 instanceof DrawableRoom) {
 			DrawableRoom currentRoom = (DrawableRoom)arg1;
+			
+			Room northRoom = currentRoom.getExits("north");
+			Room northWest = northRoom.getExits("west");
+			Room northEast = northRoom.getExits("east");
+			
+			Room southRoom = currentRoom.getExits("south");
+			Room southWest = southRoom.getExits("west");
+			Room southEast = southRoom.getExits("east");
+			
+			Room eastRoom = currentRoom.getExits("east");
+			Room westRoom = currentRoom.getExits("west");
+			
+			
+			//Set the current room to the middle tile (1,1)
 			setPanel(1, 1, currentRoom.getRoomPanel());
-			//refresh();
-			this.repaint();
+			
+
+			//North tile
+			if (northRoom != null) {
+				//Set the panel at (0,1) to the room north of the current room
+				setPanel(0,1, ((DrawableRoom) northRoom).getRoomPanel());
+			} else {
+				setPanel(0,1, new JPanel());
+			}
+				
+			//North West tile
+			if (northWest != null) {
+				setPanel(0,0,((DrawableRoom) northWest).getRoomPanel());
+			} else {
+				setPanel(0,0, new JPanel());
+			}
+			
+			//North East tile
+			if (northEast != null) {
+				setPanel(0,2,((DrawableRoom) northEast).getRoomPanel());
+			}
+			
+			//South tile
+			if (southRoom != null) {
+				//Set the panel at (2,1) to the room north of the current room
+				setPanel(2,1, ((DrawableRoom) southRoom).getRoomPanel());
+			}
+			
+			//South West tile
+			if (southWest != null) {
+				setPanel(2,0,((DrawableRoom) southWest).getRoomPanel());
+			}
+			
+			//South East tile
+			if (southEast != null) {
+				setPanel(2,2,((DrawableRoom) southEast).getRoomPanel());
+			}
+			
+			//East tile
+			if (eastRoom != null) {
+				setPanel(1,2, ((DrawableRoom) eastRoom).getRoomPanel());
+			}
+			
+			if (westRoom != null) {
+				//Set the panel at (1,0) to the room north of the current room
+				setPanel(1,0, ((DrawableRoom) westRoom).getRoomPanel());
+			}
+			
+			refresh();
 		}
 	}
 	
 	public void setPanel(int x, int y, JPanel panel) {
+		remove(tiles[x][y]);
 		tiles[x][y] = panel;
 	}
 	
 	public void refresh() {
-		this.removeAll();
+		getContentPane().removeAll();
+		
 		for (int i=0; i<SIZE; i++ ){
 			for (int j=0; j<SIZE; j++) {
 				add(tiles[i][j]);
 			}
 		}
+		
+		validate();
+		repaint();
 	}
 
 }
