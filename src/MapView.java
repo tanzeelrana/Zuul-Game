@@ -99,32 +99,44 @@ public class MapView extends JFrame implements Observer {
 			//North East tile
 			if (northEast != null) {
 				setPanel(0,2,((DrawableRoom) northEast).getRoomPanel());
+			}else {
+				setPanel(0,2, new JPanel());
 			}
 			
 			//South tile
 			if (southRoom != null) {
 				//Set the panel at (2,1) to the room north of the current room
 				setPanel(2,1, ((DrawableRoom) southRoom).getRoomPanel());
+			}else {
+				setPanel(2,1, new JPanel());
 			}
 			
 			//South West tile
 			if (southWest != null) {
 				setPanel(2,0,((DrawableRoom) southWest).getRoomPanel());
+			}else {
+				setPanel(2,0, new JPanel());
 			}
 			
 			//South East tile
 			if (southEast != null) {
 				setPanel(2,2,((DrawableRoom) southEast).getRoomPanel());
+			}else {
+				setPanel(2,2, new JPanel());
 			}
 			
 			//East tile
 			if (eastRoom != null) {
 				setPanel(1,2, ((DrawableRoom) eastRoom).getRoomPanel());
+			}else {
+				setPanel(1,2, new JPanel());
 			}
 			
 			if (westRoom != null) {
 				//Set the panel at (1,0) to the room north of the current room
 				setPanel(1,0, ((DrawableRoom) westRoom).getRoomPanel());
+			}else {
+				setPanel(1,0, new JPanel());
 			}
 			
 			refresh();
