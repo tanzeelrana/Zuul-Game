@@ -56,12 +56,22 @@ public class MapView extends JFrame implements Observer {
 			DrawableRoom currentRoom = (DrawableRoom)arg1;
 			
 			Room northRoom = currentRoom.getExits("north");
-			Room northWest = northRoom.getExits("west");
-			Room northEast = northRoom.getExits("east");
+			Room northWest = null;
+			Room northEast = null;
+			
+			if (northRoom != null) {
+				northWest = northRoom.getExits("west");
+				northEast = northRoom.getExits("east");
+			}
 			
 			Room southRoom = currentRoom.getExits("south");
-			Room southWest = southRoom.getExits("west");
-			Room southEast = southRoom.getExits("east");
+			Room southWest = null;
+			Room southEast = null;
+			
+			if (southRoom != null) {
+				southWest = southRoom.getExits("west");
+				southEast = southRoom.getExits("east");
+			}
 			
 			Room eastRoom = currentRoom.getExits("east");
 			Room westRoom = currentRoom.getExits("west");
