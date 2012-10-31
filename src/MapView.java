@@ -1,4 +1,5 @@
 import java.awt.Button;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.Observable;
@@ -16,6 +17,11 @@ import javax.swing.JPanel;
  */
 
 public class MapView extends JFrame implements Observer {
+	
+	private static final String SOUTH = "south";
+	private static final String EAST = "east";
+	private static final String WEST = "west";
+	private static final String NORTH = "north";
 	
 	private static int SIZE = 3;
 	private static int WINDOW_SIZE = 600;
@@ -44,6 +50,8 @@ public class MapView extends JFrame implements Observer {
 		setSize(WINDOW_SIZE,WINDOW_SIZE);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		setBackground(Color.WHITE);
 	}
 	
 	public static void main(String args[]) {
@@ -55,26 +63,39 @@ public class MapView extends JFrame implements Observer {
 		if (arg1 instanceof DrawableRoom) {
 			DrawableRoom currentRoom = (DrawableRoom)arg1;
 			
-			Room northRoom = currentRoom.getExits("north");
+			Room northRoom = currentRoom.getExits(NORTH);
 			Room northWest = null;
 			Room northEast = null;
 			
 			if (northRoom != null) {
-				northWest = northRoom.getExits("west");
-				northEast = northRoom.getExits("east");
+				northWest = northRoom.getExits(WEST);
+				northEast = northRoom.getExits(EAST);
 			}
 			
-			Room southRoom = currentRoom.getExits("south");
+			Room southRoom = currentRoom.getExits(SOUTH);
 			Room southWest = null;
 			Room southEast = null;
 			
 			if (southRoom != null) {
-				southWest = southRoom.getExits("west");
-				southEast = southRoom.getExits("east");
+				southWest = southRoom.getExits(WEST);
+				southEast = southRoom.getExits(EAST);
 			}
 			
-			Room eastRoom = currentRoom.getExits("east");
-			Room westRoom = currentRoom.getExits("west");
+			Room eastRoom = currentRoom.getExits(EAST);
+			if (northEast == null && eastRoom != null) {
+				northEast = eastRoom.getExits(NORTH);
+			}
+			if (southEast == null && eastRoom != null) {
+				southEast = eastRoom.getExits(SOUTH);
+			}
+			
+			Room westRoom = currentRoom.getExits(WEST);
+			if (northWest == null && westRoom != null) {
+				northWest = westRoom.getExits(NORTH);
+			}
+			if (southWest == null && westRoom != null) {
+				southWest = westRoom.getExits(SOUTH);
+			}
 			
 			
 			//Set the current room to the middle tile (1,1)
@@ -132,6 +153,7 @@ public class MapView extends JFrame implements Observer {
 				setPanel(1,2, new JPanel());
 			}
 			
+			//West tile
 			if (westRoom != null) {
 				//Set the panel at (1,0) to the room north of the current room
 				setPanel(1,0, ((DrawableRoom) westRoom).getRoomPanel());

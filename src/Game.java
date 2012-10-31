@@ -67,26 +67,34 @@ public class Game extends Observable
         // initialise room exits
 
         gallery.setExits("south",workshop);
+        
         workshop.setExits("north",gallery);
-        workshop.setExits("east",theater);
-        workshop.setExits("south",dressingroom);
-        dressingroom.setExits("north",workshop);
+//        workshop.setExits("east",theater);
+        workshop.setExits("east",dressingroom);
+        
+        dressingroom.setExits("west",workshop);
         dressingroom.setExits("east", technician);
+        
         technician.setExits("west",dressingroom);
         technician.setExits("north",studio);
+        
         studio.setExits("south",technician);
         studio.setExits("west",theater);
         studio.setExits("north",dinningroom);
+        
         dinningroom.setExits("south", studio);
         dinningroom.setExits("west", lobby);
+        
         lobby.setExits("east",dinningroom);
         lobby.setExits("south",theater);
         lobby.setExits("west",waitingroom);
         lobby.setExits("north",entrance);
-        waitingroom.setExits("west",lobby);
+        
+        waitingroom.setExits("east",lobby);
+        
         theater.setExits("north",lobby);
         theater.setExits("east",studio);
-        theater.setExits("west",workshop);
+//        theater.setExits("west",workshop);
         entrance.setExits("south",lobby);
         
         //create the items
@@ -122,12 +130,12 @@ public class Game extends Observable
      */
     public void play()
     {            
+        printWelcome();
+
         //Notify observers
         setChanged();
         notifyObservers(player1.getCurrentPlayerRoom());
         
-        printWelcome();
-
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
 
