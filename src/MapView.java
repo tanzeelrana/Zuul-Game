@@ -28,6 +28,8 @@ public class MapView extends JFrame implements Observer {
 	private JPanel[][] tiles;
 	private GridLayout layout;
 	
+	private JPanel blank;
+	
 	public MapView(String name) {
 		super(name);
 		
@@ -41,6 +43,7 @@ public class MapView extends JFrame implements Observer {
 		for (int i=0; i<SIZE; i++ ){
 			for (int j=0; j<SIZE; j++) {
 				tiles[i][j] = new JPanel();
+				tiles[i][j].setBackground(Color.BLACK);
 				//tiles[i][j].add(new JLabel("(" + i + "," + j + ")"));
 				add(tiles[i][j]);
 			}
@@ -51,7 +54,7 @@ public class MapView extends JFrame implements Observer {
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		setBackground(Color.WHITE);
+		setBackground(Color.BLACK);
 	}
 	
 	public static void main(String args[]) {
@@ -62,112 +65,23 @@ public class MapView extends JFrame implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 instanceof DrawableRoom) {
 			DrawableRoom currentRoom = (DrawableRoom)arg1;
+			Room rooms[][] = new Room[SIZE][SIZE];
+			rooms[1][1] = currentRoom;
 			
-			Room northRoom = currentRoom.getExits(NORTH);
-			Room northWest = null;
-			Room northEast = null;
+			discoverRooms(1, 1, rooms, null);
 			
-			if (northRoom != null) {
-				northWest = northRoom.getExits(WEST);
-				northEast = northRoom.getExits(EAST);
+			for (int i=0; i<SIZE; i++) {
+				for (int j=0; j<SIZE; j++) {
+					if (rooms[i][j] != null) {
+						DrawableRoom temp = (DrawableRoom)rooms[i][j];
+						tiles[i][j] = temp.getRoomPanel();
+					} else {
+						tiles[i][j] = new JPanel();
+					}	
+				}
 			}
-			
-			Room southRoom = currentRoom.getExits(SOUTH);
-			Room southWest = null;
-			Room southEast = null;
-			
-			if (southRoom != null) {
-				southWest = southRoom.getExits(WEST);
-				southEast = southRoom.getExits(EAST);
-			}
-			
-			Room eastRoom = currentRoom.getExits(EAST);
-			if (northEast == null && eastRoom != null) {
-				northEast = eastRoom.getExits(NORTH);
-			}
-			if (southEast == null && eastRoom != null) {
-				southEast = eastRoom.getExits(SOUTH);
-			}
-			
-			Room westRoom = currentRoom.getExits(WEST);
-			if (northWest == null && westRoom != null) {
-				northWest = westRoom.getExits(NORTH);
-			}
-			if (southWest == null && westRoom != null) {
-				southWest = westRoom.getExits(SOUTH);
-			}
-			
-			
-			//Set the current room to the middle tile (1,1)
-			setPanel(1, 1, currentRoom.getRoomPanel());
-			
-
-			//North tile
-			if (northRoom != null) {
-				//Set the panel at (0,1) to the room north of the current room
-				setPanel(0,1, ((DrawableRoom) northRoom).getRoomPanel());
-			} else {
-				setPanel(0,1, new JPanel());
-			}
-				
-			//North West tile
-			if (northWest != null) {
-				setPanel(0,0,((DrawableRoom) northWest).getRoomPanel());
-			} else {
-				setPanel(0,0, new JPanel());
-			}
-			
-			//North East tile
-			if (northEast != null) {
-				setPanel(0,2,((DrawableRoom) northEast).getRoomPanel());
-			}else {
-				setPanel(0,2, new JPanel());
-			}
-			
-			//South tile
-			if (southRoom != null) {
-				//Set the panel at (2,1) to the room north of the current room
-				setPanel(2,1, ((DrawableRoom) southRoom).getRoomPanel());
-			}else {
-				setPanel(2,1, new JPanel());
-			}
-			
-			//South West tile
-			if (southWest != null) {
-				setPanel(2,0,((DrawableRoom) southWest).getRoomPanel());
-			}else {
-				setPanel(2,0, new JPanel());
-			}
-			
-			//South East tile
-			if (southEast != null) {
-				setPanel(2,2,((DrawableRoom) southEast).getRoomPanel());
-			}else {
-				setPanel(2,2, new JPanel());
-			}
-			
-			//East tile
-			if (eastRoom != null) {
-				setPanel(1,2, ((DrawableRoom) eastRoom).getRoomPanel());
-			}else {
-				setPanel(1,2, new JPanel());
-			}
-			
-			//West tile
-			if (westRoom != null) {
-				//Set the panel at (1,0) to the room north of the current room
-				setPanel(1,0, ((DrawableRoom) westRoom).getRoomPanel());
-			}else {
-				setPanel(1,0, new JPanel());
-			}
-			
 			refresh();
 		}
-	}
-	
-	public void setPanel(int x, int y, JPanel panel) {
-		remove(tiles[x][y]);
-		tiles[x][y] = panel;
 	}
 	
 	public void refresh() {
@@ -182,5 +96,46 @@ public class MapView extends JFrame implements Observer {
 		validate();
 		repaint();
 	}
-
+	
+	private void discoverRooms(int x, int y, Room[][] rooms, String previous) {
+		//Check north
+		if (previous != SOUTH) {
+			if (rooms[x][y].getExits(NORTH) != null) {
+				if (x>0 && rooms[x-1][y] == null) {
+					rooms[x-1][y] = rooms[x][y].getExits(NORTH);
+					discoverRooms(x-1, y, rooms, NORTH);
+				}
+			}
+		}
+		
+		//Check south
+		if (previous != NORTH) {
+			if (rooms[x][y].getExits(SOUTH) != null) {
+				if (x<2 && rooms[x+1][y] == null) {
+					rooms[x+1][y] = rooms[x][y].getExits(SOUTH);
+					discoverRooms(x+1, y, rooms, SOUTH);
+				}
+			}
+		}
+		
+		//Check west
+		if (previous != EAST) {
+			if (rooms[x][y].getExits(WEST) != null) {
+				if (y>0 && rooms[x][y-1] == null) {
+					rooms[x][y-1] = rooms[x][y].getExits(WEST);
+					discoverRooms(x, y-1, rooms, WEST);
+				}
+			}
+		}
+		
+		//Check east
+		if (previous != WEST) {
+			if (rooms[x][y].getExits(EAST) != null) {
+				if (y<2 && rooms[x][y+1] == null) {
+					rooms[x][y+1] = rooms[x][y].getExits(EAST);
+					discoverRooms(x, y+1, rooms, EAST);
+				}
+			}
+		}
+	}
 }

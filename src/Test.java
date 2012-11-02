@@ -3,6 +3,8 @@ import java.awt.BorderLayout;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.Color;
+import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
 
 
 public class Test extends JPanel {
@@ -11,30 +13,32 @@ public class Test extends JPanel {
 	 * Create the panel.
 	 */
 	public Test() {
+		setBackground(Color.WHITE);
+		setBorder(null);
 		setLayout(new BorderLayout(0, 0));
 		
-		JPanel west = new JPanel();
-		west.setBackground(Color.BLACK);
-		add(west, BorderLayout.WEST);
-		
-		JPanel north = new JPanel();
-		north.setBackground(Color.BLACK);
-		add(north, BorderLayout.NORTH);
-		
-		JPanel south = new JPanel();
-		south.setBackground(Color.BLACK);
+		JLabel south = new JLabel("");
+		south.setBorder(null);
+		south.setBackground(Color.WHITE);
+		south.setIcon(new ImageIcon(Test.class.getResource("/img/exit-south.gif")));
 		add(south, BorderLayout.SOUTH);
 		
-		JPanel east = new JPanel();
-		east.setBackground(Color.BLACK);
+		JLabel west = new JLabel("");
+		west.setBackground(Color.WHITE);
+		west.setIcon(new ImageIcon(Test.class.getResource("/img/exit-west.gif")));
+		add(west, BorderLayout.WEST);
+		
+		JLabel north = new JLabel("");
+		north.setIcon(new ImageIcon(Test.class.getResource("/img/exit-north.gif")));
+		add(north, BorderLayout.NORTH);
+		
+		JLabel east = new JLabel("");
+		east.setIcon(new ImageIcon(Test.class.getResource("/img/exit-east.gif")));
 		add(east, BorderLayout.EAST);
 		
-		JPanel center = new JPanel();
-		center.setBackground(Color.WHITE);
-		add(center, BorderLayout.CENTER);
-		
-		JLabel roomName = new JLabel("Room");
-		center.add(roomName);
+		JLabel room = new JLabel("Room");
+		room.setHorizontalAlignment(SwingConstants.CENTER);
+		add(room, BorderLayout.CENTER);
 
 	}
 
