@@ -1,15 +1,28 @@
 package testSuite;
 
+import view.DrawableRoom;
+import model.Room;
 import junit.framework.TestCase;
 
 public class RoomTest extends TestCase {
-
+	private final static String NORTH = "north";
+	private final static String SOUTH = "south";
+	private final static String EAST = "east";
+	private final static String WEST = "west";
+	
+	private Room gallery;
+	private Room workshop;
+	private Room lobby;
+	
 	protected void setUp() throws Exception {
 		super.setUp();
+		gallery = new Room("Gallery");
+		workshop = new Room("Workshop");
+		lobby = new Room("Lobby");
 	}
 
 	public void testSetExits() {
-		fail("Not yet implemented");
+		gallery.setExits(NORTH, workshop);
 	}
 
 	public void testGetDescription() {
