@@ -118,34 +118,34 @@ public class MapView extends JFrame implements Observer {
 	 */
 	private void discoverRooms(int x, int y, Room[][] rooms) {
 		//Check north
-		if (rooms[x][y].getExits(NORTH) != null) { //If there is a north exit
+		if (rooms[x][y].getExit(NORTH) != null) { //If there is a north exit
 			if (x>0 && rooms[x-1][y] == null) { //If x is within the bounds of the array (x>0) and the room to the north hasn't already been visited
-				rooms[x-1][y] = rooms[x][y].getExits(NORTH);
+				rooms[x-1][y] = rooms[x][y].getExit(NORTH);
 				discoverRooms(x-1, y, rooms);
 			}
 		}
 		
 		//Check south
-		if (rooms[x][y].getExits(SOUTH) != null) { //If there is a south exit
+		if (rooms[x][y].getExit(SOUTH) != null) { //If there is a south exit
 			if (x<(SIZE-1) && rooms[x+1][y] == null) { //If x is within the bounds of the array (SIZE) and the room to the south hasn't already been visited
-				rooms[x+1][y] = rooms[x][y].getExits(SOUTH);
+				rooms[x+1][y] = rooms[x][y].getExit(SOUTH);
 				discoverRooms(x+1, y, rooms);
 			}
 		}
 		
 		
 		//Check west
-		if (rooms[x][y].getExits(WEST) != null) { //If there is a west exit
+		if (rooms[x][y].getExit(WEST) != null) { //If there is a west exit
 			if (y>0 && rooms[x][y-1] == null) { //If y is within the bounds of the array (y>0) and the room to the west hasn't already been visited
-				rooms[x][y-1] = rooms[x][y].getExits(WEST);
+				rooms[x][y-1] = rooms[x][y].getExit(WEST);
 				discoverRooms(x, y-1, rooms);
 			}
 		}	
 		
 		//Check east
-		if (rooms[x][y].getExits(EAST) != null) { //If there is an east exit
+		if (rooms[x][y].getExit(EAST) != null) { //If there is an east exit
 			if (y<(SIZE-1) && rooms[x][y+1] == null) { //If Y is within the bounds of the array (SIZE) and the room to the east hasn't already been visited
-				rooms[x][y+1] = rooms[x][y].getExits(EAST);
+				rooms[x][y+1] = rooms[x][y].getExit(EAST);
 				discoverRooms(x, y+1, rooms);
 			}
 		}

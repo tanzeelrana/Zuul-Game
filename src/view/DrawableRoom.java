@@ -46,7 +46,7 @@ public class DrawableRoom extends Room {
 		JLabel south = new JLabel("");
 		south.setBorder(null);
 		south.setBackground(Color.WHITE);
-		if (this.getExits(SOUTH) != null) {
+		if (this.getExit(SOUTH) != null) {
 			south.setIcon(new ImageIcon(DrawableRoom.class.getResource("/img/exit-south.gif")));
 		} else {
 			south.setIcon(new ImageIcon(DrawableRoom.class.getResource("/img/wall-south.gif")));
@@ -55,7 +55,7 @@ public class DrawableRoom extends Room {
 		
 		JLabel west = new JLabel("");
 		west.setBackground(Color.WHITE);
-		if (this.getExits(WEST) != null) {
+		if (this.getExit(WEST) != null) {
 			west.setIcon(new ImageIcon(DrawableRoom.class.getResource("/img/exit-west.gif")));
 		} else {
 			west.setIcon(new ImageIcon(DrawableRoom.class.getResource("/img/wall-west.gif")));
@@ -63,7 +63,7 @@ public class DrawableRoom extends Room {
 		panel.add(west, BorderLayout.WEST);
 		
 		JLabel north = new JLabel("");
-		if (this.getExits(NORTH) != null) {
+		if (this.getExit(NORTH) != null) {
 			north.setIcon(new ImageIcon(DrawableRoom.class.getResource("/img/exit-north.gif")));
 		} else {
 			north.setIcon(new ImageIcon(DrawableRoom.class.getResource("/img/wall-north.gif")));
@@ -71,7 +71,7 @@ public class DrawableRoom extends Room {
 		panel.add(north, BorderLayout.NORTH);
 		
 		JLabel east = new JLabel("");
-		if (this.getExits(EAST) != null) {
+		if (this.getExit(EAST) != null) {
 			east.setIcon(new ImageIcon(DrawableRoom.class.getResource("/img/exit-east.gif")));
 		} else {
 			east.setIcon(new ImageIcon(DrawableRoom.class.getResource("/img/wall-east.gif")));

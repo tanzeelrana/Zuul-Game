@@ -374,7 +374,7 @@ public class Game extends Observable
         }
 
         String direction = command.getSecondWord();
-        Room nextRoom = player1.getCurrentPlayerRoom().getExits(direction);
+        Room nextRoom = player1.getCurrentPlayerRoom().getExit(direction);
 
         if (nextRoom == null) {
             System.out.println("There is no door!");

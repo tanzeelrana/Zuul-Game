@@ -62,7 +62,7 @@ public class Room {
 		return description;
 	}
 
-	public String getExitString() {
+	private String getExitString() {
 
 		String s = "Exits : ";
 		Set<String> keys = exits.keySet();
@@ -85,7 +85,7 @@ public class Room {
 		return ("You are at the " + description + ".\n" + getExitString() + getItemString() + "\n" + getMonstersString());
 	}
 
-	public Room getExits(String direction) {
+	public Room getExit(String direction) {
 		return exits.get(direction);
 	}
 
