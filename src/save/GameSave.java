@@ -25,6 +25,10 @@ public class GameSave implements Serializable {
 		this.rooms = rooms;
 	}
 	
+	public GameSave() {
+		this(null, null);
+	}
+	
 	public Player getPlayer() {
 		return player;
 	}
@@ -54,10 +58,6 @@ public class GameSave implements Serializable {
 		}
 	}
 	
-	public boolean saveToXML(String path) {
-		return false;
-	}
-	
 	public boolean loadFromSerial(String path) {
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File(path)));
@@ -80,10 +80,6 @@ public class GameSave implements Serializable {
 			return false;
 		}
 		
-	}
-	
-	public boolean loadFromXML(String path) {
-		return false;
 	}
 
 }

@@ -51,10 +51,5 @@ public class GameDriver {
 		game.loadGame(player, rooms);
 		view.show();
 	}
-	
-//	public static void main(String args[]) {
-//		GameDriver driver = new GameDriver();
-//		driver.startDefaultGame();
-//	}
 
 }

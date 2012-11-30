@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -13,13 +14,14 @@ import model.Room;
 import model.object.Item;
 import model.object.Monster;
 import model.object.Player;
+import save.GameSave;
 import view.FirstPersonItem;
 import view.FirstPersonMonster;
 import view.FirstPersonRoom;
 
 public class LevelEditor extends Observable implements Observer {
 	
-    private HashMap<String,Room> rooms;
+    private HashMap<String,FirstPersonRoom> rooms;
     private HashMap<String,Monster> monsters;
     private HashMap<String,Item> items;
     private String roomsArray[][];
@@ -45,13 +47,14 @@ public class LevelEditor extends Observable implements Observer {
 	private static final String REMOVE_ROOM = "removeRoom";
 	private static final String ADD_ROOM = "addRoom";
 	private static final String LOOK = "look";
+	private static final String GENERATE_GAME_SAVE = "generateGameSave";
 	
-	public LevelEditor(int maxX, int maxY, int playerHealth, int playerWeight) {
-		rooms = new HashMap<String,Room>();
+	public LevelEditor(int maxX, int maxY) {
+		rooms = new HashMap<String,FirstPersonRoom>();
 		monsters = new HashMap<String,Monster>();
 		items = new HashMap<String,Item>();
 		roomsArray = new String[maxX][maxY];
-		player = new Player("Player", playerWeight, playerHealth);
+		player = new Player();
 		
 		//Initialize the size of the game
 		this.maxX = maxX;
@@ -87,7 +90,7 @@ public class LevelEditor extends Observable implements Observer {
 		update();
 	}
 	
-	public void addRoom(Room room) {
+	public void addRoom(FirstPersonRoom room) {
 		rooms.put(room.getDescription(), room);
 		roomsArray[x][y] = room.getDescription();
 		update();
@@ -299,10 +302,47 @@ public class LevelEditor extends Observable implements Observer {
 				addItem(temp[1]);
 			} else if (temp[0].equals(LOOK)) {
 				look(temp[1]);
+			} else if (temp[0].equals(GENERATE_GAME_SAVE)) {
+				generateGameSave(temp[1],temp[2],temp[3],temp[4]);
 			}
 			
 			update();
 		}
+	}
+
+	private void generateGameSave(String strHealth, String strWeight, String room, String path) {
+		//notifyObservers("generateGameSave" + "," + startingHealth + "," + startingWeight + "," + startingRoom + "," + path);
+		if (strWeight == null || strHealth == null) {
+			JOptionPane.showMessageDialog(null, "Error: Please enter a valid integer number for Weight and Health.");
+			return;
+		}
+		
+		if (rooms.get(room) == null) {
+			JOptionPane.showMessageDialog(null, "Error: Please enter a valid name of an exisiting room");
+			return;
+		}
+		
+		int health = Integer.parseInt(strHealth);
+		int weight = Integer.parseInt(strWeight);
+		
+		Player player = new Player(weight, health);
+		player.setCurrentRoom(rooms.get(room));
+		
+		GameSave save = new GameSave(player, rooms);
+		
+		if (save.serialize(path)) {
+			JOptionPane.showMessageDialog(null, "Saved successfully!");
+		} else {
+			JOptionPane.showMessageDialog(null, "Error: Please enter a valid path");
+		}
+	}
+
+	public Set<String> getItems() {
+		return items.keySet();
+	}
+
+	public Set<String> getMonsters() {
+		return monsters.keySet();
 	}
 
 }

@@ -2,19 +2,32 @@ package editor.view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+
+import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
 
 import model.Room;
 import model.object.Player;
 import view.FirstPersonRoom;
-import editor.controller.EditorMouseListener;
+import editor.controller.EditorListener;
 import editor.controller.EditorUpdateObject;
 
 public class EditorView extends Observable implements Observer {
@@ -24,6 +37,17 @@ public class EditorView extends Observable implements Observer {
 	private static final String WEST = "west";
 	private static final String NORTH = "north";
 
+	private static final String REMOVE_ITEM = "removeItem";
+	private static final String ADD_ITEM = "addItem";
+	private static final String REMOVE_MONSTER = "removeMonster";
+	private static final String ADD_MONSTER = "addMonster";
+	private static final String REMOVE_EXIT = "removeExit";
+	private static final String ADD_EXIT = "addExit";
+	private static final String REMOVE_ROOM = "removeRoom";
+	private static final String ADD_ROOM = "addRoom";
+	private static final String LOOK = "look";
+	private static final String GENERATE_GAME_SAVE = "generateGameSave";
+
 	private GridLayout gridLayout;
 	private BorderLayout borderLayout;
 	private EditorMap map;
@@ -32,7 +56,7 @@ public class EditorView extends Observable implements Observer {
 	private JFrame mainFrame;
 
 	private String[][] roomsArray;
-	private HashMap<String, Room> rooms;
+	private HashMap<String, FirstPersonRoom> rooms;
 	private int x;
 	private int y;
 
@@ -42,9 +66,12 @@ public class EditorView extends Observable implements Observer {
 	private EditorToolsPanel toolsPanel;
 
 	private Player player;
+	
+	private Set<String> items;
+	private Set<String> monsters;
 
 	public EditorView(String name, int maxX, int maxY,
-			EditorMouseListener mouseListener) {
+			EditorListener mouseListener, Set<String> items, Set<String> monsters) {
 		gamePanel = new JPanel();
 		mainFrame = new JFrame(name);
 
@@ -70,14 +97,17 @@ public class EditorView extends Observable implements Observer {
 		mainFrame.setSize(1505, 600);
 		mainFrame.setResizable(false);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		mainFrame.setBackground(Color.BLACK);
+		// mainFrame.setBackground(Color.BLACK);
 
 		currentRoom = null;
 
-		toolsPanel = new EditorToolsPanel(mouseListener);
+		this.items = items;
+		this.monsters = monsters;
+		
+		toolsPanel = new EditorToolsPanel();
 
 		roomsArray = new String[maxX][maxY];
-		rooms = new HashMap<String, Room>();
+		rooms = new HashMap<String, FirstPersonRoom>();
 
 		player = new Player(null, 0, 0);
 	}
@@ -169,5 +199,290 @@ public class EditorView extends Observable implements Observer {
 	public void show() {
 		refreshView();
 		mainFrame.setVisible(true);
+	}
+
+	public class EditorToolsPanel extends JPanel {
+
+		private static final long serialVersionUID = 1L;
+		private JTextField xmlPath;
+		private JTextField health;
+		private JTextField weight;
+		private JTextField gameSavePath;
+		private JTextField room;
+
+		/**
+		 * Create the panel.
+		 */
+		public EditorToolsPanel() {
+			setLayout(new FormLayout(new ColumnSpec[] {
+					FormFactory.RELATED_GAP_COLSPEC,
+					ColumnSpec.decode("default:grow"),
+					FormFactory.RELATED_GAP_COLSPEC,
+					ColumnSpec.decode("default:grow"),
+					FormFactory.RELATED_GAP_COLSPEC, }, new RowSpec[] {
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC, }));
+
+			JButton btnCreateRoom = new JButton("Create Room");
+			btnCreateRoom.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					setChanged();
+					notifyObservers(ADD_ROOM);
+				}
+			});
+			add(btnCreateRoom, "2, 2, 3, 1");
+
+			final JComboBox directionBox = new JComboBox();
+			directionBox.setModel(new DefaultComboBoxModel(new String[] {
+					"Select One", "north", "south", "east", "west" }));
+
+			JButton btnDeleteRoom = new JButton("Delete Room");
+			btnDeleteRoom.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					setChanged();
+					notifyObservers(REMOVE_ROOM);
+				}
+			});
+			add(btnDeleteRoom, "2, 4, 3, 1");
+
+			JSeparator separator = new JSeparator();
+			add(separator, "2, 6, 3, 1");
+
+			JLabel lblDirection_1 = new JLabel("Exit Direction:");
+			add(directionBox, "4, 8, fill, default");
+
+			final JComboBox monstersBox = new JComboBox();
+			monstersBox.setModel(new DefaultComboBoxModel(monsters.toArray()));
+
+			JButton btnDeleteExit = new JButton("Delete Exit");
+			btnDeleteExit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					setChanged();
+					notifyObservers(REMOVE_EXIT + ","
+							+ directionBox.getSelectedItem());
+				}
+			});
+			add(btnDeleteExit, "2, 10");
+
+			JButton btnAddExit = new JButton("Add Exit");
+			btnAddExit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					setChanged();
+					notifyObservers(ADD_EXIT + ","
+							+ directionBox.getSelectedItem());
+				}
+			});
+			add(btnAddExit, "4, 10");
+
+			JSeparator separator_1 = new JSeparator();
+			add(separator_1, "2, 12, 3, 1");
+
+			JLabel lblMonster = new JLabel("Monster:");
+			add(lblMonster, "2, 14, right, default");
+			monstersBox.setToolTipText("monster");
+			add(monstersBox, "4, 14, fill, default");
+
+			JButton btnAddMonster = new JButton("Add Monster");
+			btnAddMonster.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					setChanged();
+					notifyObservers(ADD_MONSTER + ","
+							+ monstersBox.getSelectedItem());
+				}
+			});
+			add(btnAddMonster, "2, 16");
+
+			JButton btnDeleteMonster = new JButton("Delete Monster");
+			btnDeleteMonster.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					setChanged();
+					notifyObservers(REMOVE_MONSTER + ","
+							+ monstersBox.getSelectedItem());
+				}
+			});
+			add(btnDeleteMonster, "4, 16");
+
+			JSeparator separator_2 = new JSeparator();
+			add(separator_2, "2, 18, 3, 1");
+
+			JLabel lblItem = new JLabel("Item");
+			add(lblItem, "2, 20, right, default");
+
+			final JComboBox itemBox = new JComboBox();
+			itemBox.setModel(new DefaultComboBoxModel(items.toArray()));
+			add(itemBox, "4, 20, fill, default");
+
+			JButton btnDeleteItem = new JButton("Delete Item");
+			btnDeleteItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					setChanged();
+					notifyObservers(REMOVE_ITEM + ","
+							+ itemBox.getSelectedItem());
+				}
+			});
+			add(btnDeleteItem, "2, 22");
+
+			JButton btnAddItem = new JButton("Add Item");
+			btnAddItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					setChanged();
+					notifyObservers(ADD_ITEM + "," + itemBox.getSelectedItem());
+				}
+			});
+			add(btnAddItem, "4, 22");
+
+			JSeparator separator_3 = new JSeparator();
+			add(separator_3, "2, 24, 3, 1");
+
+			JButton btnTurnLeft = new JButton("Turn Left");
+			btnTurnLeft.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String lookingDirection = "";
+
+					if (player.getLookingDirection().equals(NORTH)) {
+						lookingDirection = WEST;
+					} else if (player.getLookingDirection().equals(SOUTH)) {
+						lookingDirection = EAST;
+					} else if (player.getLookingDirection().equals(EAST)) {
+						lookingDirection = NORTH;
+					} else if (player.getLookingDirection().equals(WEST)) {
+						lookingDirection = SOUTH;
+					}
+
+					setChanged();
+					notifyObservers(LOOK + "," + lookingDirection);
+				}
+			});
+			add(btnTurnLeft, "2, 26");
+
+			JButton btnTurnRight = new JButton("Turn Right");
+			btnTurnRight.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String lookingDirection = "";
+
+					if (player.getLookingDirection().equals(NORTH)) {
+						lookingDirection = EAST;
+					} else if (player.getLookingDirection().equals(SOUTH)) {
+						lookingDirection = WEST;
+					} else if (player.getLookingDirection().equals(EAST)) {
+						lookingDirection = SOUTH;
+					} else if (player.getLookingDirection().equals(WEST)) {
+						lookingDirection = NORTH;
+					}
+
+					setChanged();
+					notifyObservers(LOOK + "," + lookingDirection);
+				}
+			});
+			btnTurnRight.setToolTipText("right");
+			add(btnTurnRight, "4, 26");
+
+			JSeparator separator_4 = new JSeparator();
+			add(separator_4, "2, 28, 3, 1");
+
+			xmlPath = new JTextField();
+			xmlPath.setText("/path/to/level.xml");
+			add(xmlPath, "2, 30, fill, default");
+			xmlPath.setColumns(10);
+
+			JButton btnSaveLevel = new JButton("Save Level");
+			btnSaveLevel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			add(btnSaveLevel, "4, 30");
+
+			JSeparator separator_5 = new JSeparator();
+			add(separator_5, "2, 32, 3, 1");
+
+			JLabel lblStartingHealth = new JLabel("Starting Health:");
+			add(lblStartingHealth, "2, 34, right, default");
+
+			health = new JTextField();
+			add(health, "4, 34, fill, default");
+			health.setColumns(10);
+
+			JLabel lblMaximumCarryingWeight = new JLabel(
+					"Max Carrying Weight: ");
+			add(lblMaximumCarryingWeight, "2, 36, right, default");
+
+			weight = new JTextField();
+			add(weight, "4, 36, fill, default");
+			weight.setColumns(10);
+
+			JLabel lblStartingRoom = new JLabel("Starting Room:");
+			add(lblStartingRoom, "2, 38, right, default");
+
+			room = new JTextField();
+			add(room, "4, 38, fill, default");
+			room.setColumns(10);
+
+			JLabel lblPath = new JLabel("Path:");
+			add(lblPath, "2, 40, right, default");
+
+			gameSavePath = new JTextField();
+			gameSavePath.setText("/path/to/gamesave");
+			add(gameSavePath, "4, 40, fill, default");
+			gameSavePath.setColumns(10);
+
+			JButton btnGeneratePlayableGamesave = new JButton(
+					"Generate Playable GameSave");
+			btnGeneratePlayableGamesave.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String startingHealth = health.getText();
+					String startingWeight = weight.getText();
+					String startingRoom = room.getText();
+					String path = gameSavePath.getText();
+
+					setChanged();
+					notifyObservers(GENERATE_GAME_SAVE + "," + startingHealth
+							+ "," + startingWeight + "," + startingRoom + ","
+							+ path);
+				}
+			});
+			add(btnGeneratePlayableGamesave, "2, 42, 3, 1");
+
+		}
+
 	}
 }

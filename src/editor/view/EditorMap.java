@@ -11,10 +11,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import editor.controller.EditorMouseListener;
+import editor.controller.EditorListener;
 import editor.controller.EditorUpdateObject;
 
 import model.Room;
+import view.FirstPersonRoom;
 import view.MapRoom;
 
 /**
@@ -33,16 +34,16 @@ public class EditorMap extends JFrame implements Observer {
 	private GridLayout layout;
 	
 	private String[][] roomsArray;
-	private HashMap<String,Room> rooms;
+	private HashMap<String,FirstPersonRoom> rooms;
 	private int x;
 	private int y;
 	
 	private int maxX;
 	private int maxY;
 	
-	private EditorMouseListener mouseListener;
+	private EditorListener mouseListener;
 	
-	public EditorMap(String name, int x, int y, EditorMouseListener mouseListener) {
+	public EditorMap(String name, int x, int y, EditorListener mouseListener) {
 		super(name);
 		
 		maxX = x;
@@ -67,7 +68,7 @@ public class EditorMap extends JFrame implements Observer {
 		this.mouseListener = mouseListener;
 		
 		roomsArray = new String[maxX][maxY];
-		rooms = new HashMap<String, Room>();
+		rooms = new HashMap<String, FirstPersonRoom>();
 		
 		update(null,null);
 	}
