@@ -172,6 +172,8 @@ public class Game extends Observable implements Observer
 		  temp.get(i).setMouseListener(mouseListener);
 	  }
 	  
+	  player1.getCurrentPlayerRoom().visit();
+	  
 	  //Refresh the View
 	  setChanged();
 	  notifyObservers(player1);
