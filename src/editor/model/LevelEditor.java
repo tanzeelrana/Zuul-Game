@@ -18,6 +18,7 @@ import save.GameSave;
 import view.FirstPersonItem;
 import view.FirstPersonMonster;
 import view.FirstPersonRoom;
+import xml.XMLWriter;
 
 public class LevelEditor extends Observable implements Observer {
 	
@@ -47,7 +48,8 @@ public class LevelEditor extends Observable implements Observer {
 	private static final String REMOVE_ROOM = "removeRoom";
 	private static final String ADD_ROOM = "addRoom";
 	private static final String LOOK = "look";
-	private static final String GENERATE_GAME_SAVE = "generateGameSave";
+	private static final String SAVE = "save";
+	private static final String PLAY = "play";
 	
 	public LevelEditor(int maxX, int maxY) {
 		rooms = new HashMap<String,FirstPersonRoom>();
@@ -302,16 +304,18 @@ public class LevelEditor extends Observable implements Observer {
 				addItem(temp[1]);
 			} else if (temp[0].equals(LOOK)) {
 				look(temp[1]);
-			} else if (temp[0].equals(GENERATE_GAME_SAVE)) {
-				generateGameSave(temp[1],temp[2],temp[3],temp[4]);
+			} else if (temp[0].equals(SAVE)) {
+				save(temp[1],temp[2]);
+			} else if (temp[0].equals(PLAY)) {
+				play(temp[1],temp[2],temp[3]);
 			}
+			
 			
 			update();
 		}
 	}
 
-	private void generateGameSave(String strHealth, String strWeight, String room, String path) {
-		//notifyObservers("generateGameSave" + "," + startingHealth + "," + startingWeight + "," + startingRoom + "," + path);
+	private void play(String strHealth, String strWeight, String room) {
 		if (strWeight == null || strHealth == null) {
 			JOptionPane.showMessageDialog(null, "Error: Please enter a valid integer number for Weight and Health.");
 			return;
@@ -328,13 +332,7 @@ public class LevelEditor extends Observable implements Observer {
 		Player player = new Player(weight, health);
 		player.setCurrentRoom(rooms.get(room));
 		
-		GameSave save = new GameSave(player, rooms);
-		
-		if (save.serialize(path)) {
-			JOptionPane.showMessageDialog(null, "Saved successfully!");
-		} else {
-			JOptionPane.showMessageDialog(null, "Error: Please enter a valid path");
-		}
+		//TODO
 	}
 
 	public Set<String> getItems() {
@@ -343,6 +341,10 @@ public class LevelEditor extends Observable implements Observer {
 
 	public Set<String> getMonsters() {
 		return monsters.keySet();
+	}
+	
+	private void save(String startingRoom, String name) {
+		XMLWriter writer = new XMLWriter(rooms, name, startingRoom);
 	}
 
 }
